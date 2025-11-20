@@ -76,7 +76,7 @@ export default function VideoRoomsApp() {
           y: "40%",
           video: visualsObjectVideo,
           // image: officeBlueprintImg,
-          audio: ambientAudioFile,
+          audio: null,
           popupTime: 5,
         },
       ],
