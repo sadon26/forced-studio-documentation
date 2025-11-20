@@ -54,7 +54,7 @@ export default function VideoRoomsApp() {
           y: "50%",
           image: officeBlueprintImg,
           popupTime: 2,
-          audio: ambientAudioFile,
+          audio: null,
         },
       ],
     },
@@ -524,7 +524,7 @@ export default function VideoRoomsApp() {
                   />
                 )}
 
-                {activeModal?.video ? (
+                {activeModal?.video && (
                   <video
                     src={activeModal.video}
                     controls
@@ -532,7 +532,9 @@ export default function VideoRoomsApp() {
                     playsInline
                     className="w-full h-auto object-contain rounded-lg"
                   ></video>
-                ) : (
+                )}
+
+                {activeModal?.text && (
                   <p className="text-lg text-gray-300 border-l-4 border-amber-400/50 pl-4 italic">
                     <TypewriterText transcript={activeModal.transcript} />
                   </p>
