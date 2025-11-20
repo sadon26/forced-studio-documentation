@@ -534,7 +534,7 @@ export default function VideoRoomsApp() {
                   ></video>
                 )}
 
-                {activeModal?.text && (
+                {activeModal?.transcript && (
                   <p className="text-lg text-gray-300 border-l-4 border-amber-400/50 pl-4 italic">
                     <TypewriterText transcript={activeModal.transcript} />
                   </p>
