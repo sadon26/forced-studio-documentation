@@ -4,10 +4,9 @@ import videoFile from "./assets/landing-video.mov";
 import ambientAudioFile from "./assets/ambience.MP3";
 import machineRoomFile from "./assets/machine-room.MP3";
 import bedroomRoomSound from "./assets/bedroom.MP3";
-import visualsObjectVideo from "./assets/storage_clip_visualsobjects.mp4";
-import visualsObjectImg from "./assets/storage_screenshot_visualsobjects.png";
+import bedroomRoomCloth from "./assets/bedroom-clothes.png";
 // import storageClothesAudio from "./assets/audio-clothes.MP3";
-import storageImg from "./assets/storage_screenshot_archival-research.png";
+import ammunitionImg from "./assets/object_machineroom_ammunition.png";
 import machineRoomBlenderImg from "./assets/machineroom1_screenshot_blender.png";
 import utensilsImg from "./assets/object_bedroom_pot.png";
 import programRecord from "./assets/program-record.mp4";
@@ -17,11 +16,9 @@ import utensilsAudio from "./assets/pot-audio.MP3";
 // import darkRoomAudio from "./assets/dark-room.MP3";
 import officeBlueprintImg from "./assets/office_blueprint.png";
 import storageVideo from "./assets/storage_clip_archivalresearch1.mp4";
-// import machineRoomBlenderVid from "./assets/machineroom1_clip_blender.mp4";
+import machineRoomBlenderVid from "./assets/machineroom1_clip_blender.mp4";
 import videoSoundForProject from "./assets/Video-Sound-for-the-project.mp4";
 import videoSoundForProjectImg from "./assets/Video-Sound-for-the-project.png";
-import TypewriterText from "./TypeWriter";
-import transcriptData from "./assets/transcript.json";
 
 export default function VideoRoomsApp() {
   const videoRef = useRef(null);
@@ -37,7 +34,11 @@ export default function VideoRoomsApp() {
   const [visibleObjects, setVisibleObjects] = useState([]);
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0);
   const [activeModal, setActiveModal] = useState(null);
-  const [videoFinished, setVideoFinished] = useState(false); // ADDED: State for end screen
+  const [videoFinished, setVideoFinished] = useState(false);
+
+  // ADDED: State for custom cursor
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isPointerActive, setIsPointerActive] = useState(false);
 
   const rooms = [
     {
@@ -53,8 +54,8 @@ export default function VideoRoomsApp() {
           x: "10%",
           y: "50%",
           image: officeBlueprintImg,
+          audio: ambientAudioFile,
           popupTime: 2,
-          audio: null,
         },
       ],
     },
@@ -67,10 +68,10 @@ export default function VideoRoomsApp() {
       objects: [
         {
           id: "o10",
-          src: visualsObjectImg,
+          src: programRecordImg,
           x: "70%",
           y: "40%",
-          video: visualsObjectVideo,
+          video: programRecord,
           // image: officeBlueprintImg,
           audio: ambientAudioFile,
           popupTime: 5,
@@ -86,10 +87,24 @@ export default function VideoRoomsApp() {
       objects: [
         {
           id: "o1",
-          src: storageImg,
+          src: bedroomRoomCloth,
           x: "45%",
           y: "50%",
           video: storageVideo,
+          //           text: `When we came, the first thing that we -  when they unloaded us, they took everything away.
+          // They took us through a little tunnel, everybody had to go through this tunnel, again a
+          // tunnel. We had to leave--, to undress ourselves, everything would be left inside and that
+          // is where I lost my tallis and tefillin-- my tefillin because I was… I didn’t need
+          // the tallis, only the tefillin, because we had to leave it and I couldn’t get it no more. Up to
+          // then, I had every day before the Appell, I got up in the morning and put on the tefillin.
+          // And we went in on this one end, it was maybe a mile long, very small space, a tunnel,
+          // and you came out of the other end. It was dark inside, one just touched the other to
+          // follow. All the clothes remained in the back of us. And on the other end was sitting with
+          // the tables, both sides the Germans, and they gave us a number, not the numbers inscribed
+          // here, but everybody had like, it was like a prison coat, it looked like a pajamas, white and
+          // blue, white and blue or white and gray, you know, stripes, pants, and on each one of
+          // was sewed on a number. My number was 68,692, I remember still, and my brother’s was
+          // a number higher, but we were together.`,
           audio: null,
           popupTime: 9,
         },
@@ -106,21 +121,24 @@ export default function VideoRoomsApp() {
         {
           id: "o3",
           src: videoSoundForProjectImg,
-          x: "20%",
-          y: "30%",
+          x: "50%",
+          y: "50%",
           video: videoSoundForProject,
           audio: null,
           popupTime: 17,
         },
         {
-          id: "o156",
-          src: programRecordImg,
-          x: "20%",
-          y: "50%",
-          video: programRecord,
-          // image: officeBlueprintImg,
-          audio: ambientAudioFile,
-          popupTime: 22,
+          id: "o3",
+          src: machineRoomBlenderImg,
+          x: "60%",
+          y: "20%",
+          video: machineRoomBlenderVid,
+          //           text: `So what we did about the other things besides lifting those bombs - shells that is. We also made the - what do you call this? The ammunition the powder. The powder kegs. And for shipment they
+          // were supposed - they were emerged in wax in hot wax. So the keg was powder and phosphorus yellow. And this one had to be wrapped small, it looked like kegs disks. And they were submerged into hot wax. And the first sensational thing was that actually we were turning all yellow from the powder and we would be walking half hour to the factory and half hour away from the
+          // factory eight hundred people all yellow like canary birds.
+          // We didn’t have much hair because our hair was shorn originally. But it grew back somewhat, a little bit, but the little bit was just like now the punks go around with blonde hair. We looked orange. We went totally orange from top to bottom. And to the natives we really looked like ghosts and I wouldn’t be surprised that they didn’t know whether we were human or not.`,
+          audio: null,
+          popupTime: 26,
         },
       ],
     },
@@ -136,7 +154,17 @@ export default function VideoRoomsApp() {
           src: utensilsImg,
           x: "50%",
           y: "10%",
-          transcript: JSON.parse(JSON.stringify(transcriptData)),
+          text: `I think I  remember that there were like two slices of bread there. Once in a while they had some jam that went with it, and I don’t remember whether it was
+one soup a day or two soups a day, that you had. It probably was not quite possible to
+survive on that. And, the things that, that helped is that some people had some stuff with
+them and were able to buy some extra food. Then, another thing that was happening in
+that camp that helped, that some of the clothing and belongings of the Jews that were
+exterminated was coming to that camp, and again, some of the things people were able to
+exchange for food later with the amount of clothes. See, it would come to the camp and
+some of the people worked with it - like the better things would to the Germans and they
+looked for the jewelry and so. But as long as this, and some of the people who worked in
+the camp worked on that. So that small amount of it would filter down towards the people
+in the camp.`,
           audio: utensilsAudio,
           popupTime: 33,
         },
@@ -171,7 +199,7 @@ export default function VideoRoomsApp() {
     fadeIntervalsRef.current.push(id);
   }
 
-  // 🎬 Initialize once
+  // 🎬 Initialize once and set up mouse listener
   useEffect(() => {
     ambientRef.current = new Audio(ambientAudioFile);
     ambientRef.current.loop = true;
@@ -198,8 +226,15 @@ export default function VideoRoomsApp() {
       }
     };
 
+    // ADDED: Mouse move listener
+    const updateMousePosition = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("keydown", onKey);
+
     return () => {
+      window.removeEventListener("mousemove", updateMousePosition); // ADDED Cleanup
       window.removeEventListener("keydown", onKey);
       ambientRef.current?.pause();
       Object.values(roomAudiosRef.current).forEach((a) => a?.pause());
@@ -331,7 +366,6 @@ export default function VideoRoomsApp() {
       : fadeAudio(ambientRef.current, 0.5, 300);
   };
 
-  // ADDED: Handler to trigger the end screen and stop all audio
   const handleVideoEnded = () => {
     setVideoFinished(true);
     // Stop all audio cleanly
@@ -341,15 +375,48 @@ export default function VideoRoomsApp() {
     clearFadeIntervals();
   };
 
+  // Custom cursor motion variant
+  const cursorVariants = {
+    default: {
+      height: 8,
+      width: 8,
+      opacity: 1,
+      backgroundColor: "rgb(255, 255, 255)",
+      border: "0px solid #fcd34d",
+      transition: { type: "tween", ease: "backOut", duration: 0.15 },
+    },
+    pointer: {
+      height: 30,
+      width: 30,
+      opacity: 1,
+      backgroundColor: "rgba(0, 0, 0, 0)",
+      border: "2px solid #fcd34d",
+      transition: { type: "spring", stiffness: 400, damping: 20 },
+    },
+  };
+
   return (
-    <div className="w-screen h-screen relative overflow-hidden select-none bg-black text-white font-sans">
+    // MODIFIED: Added cursor-none to the main container
+    <div className="w-screen h-screen relative overflow-hidden select-none bg-black text-white font-sans cursor-none">
+      {/* ADDED: Custom Cursor */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[1000] mix-blend-difference"
+        variants={cursorVariants}
+        animate={isPointerActive ? "pointer" : "default"}
+        style={{
+          x: mousePosition.x,
+          y: mousePosition.y,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      />
       {/* 🎥 Video background */}
       <video
         ref={videoRef}
         src={videoFile}
         className="absolute inset-0 w-full h-full object-cover brightness-[0.6] contrast-110 transition-all duration-1000"
         onTimeUpdate={onTimeUpdate}
-        onEnded={handleVideoEnded} // ADDED: onEnded prop
+        onEnded={handleVideoEnded}
         muted={false}
         playsInline
         preload="auto"
@@ -358,6 +425,7 @@ export default function VideoRoomsApp() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/90" />
 
       {/* 🧭 HUD */}
+      {/* ... (HUD content remains unchanged) ... */}
       <div className="absolute top-6 left-[50%] translate-x-[-50%] bg-zinc-900/70 backdrop-blur-lg border border-amber-400/30 text-white px-6 py-2 rounded-lg shadow-xl z-10">
         <AnimatePresence mode="wait">
           <motion.div
@@ -372,12 +440,10 @@ export default function VideoRoomsApp() {
             {rooms[currentRoomIndex]?.name}
           </motion.div>
         </AnimatePresence>
-        {/* <div className="text-xs opacity-80 mt-1">
-          Press <span className="font-bold text-blue-300">Space</span>
-        </div> */}
       </div>
 
       {/* 🚀 Start prompt */}
+      {/* MODIFIED: Added onMouseEnter/onMouseLeave to the button */}
       <AnimatePresence>
         {!started && (
           <motion.div
@@ -400,7 +466,11 @@ export default function VideoRoomsApp() {
                   ease: "easeInOut",
                 }}
               >
-                <div className="px-6 py-3 border-2 border-amber-400 rounded-lg text-xl text-amber-300 font-mono bg-amber-400/10 backdrop-blur-md shadow-2xl transition duration-300">
+                <div
+                  className="px-6 py-3 border-2 border-amber-400 rounded-lg text-xl text-amber-300 font-mono bg-amber-400/10 backdrop-blur-md shadow-2xl transition duration-300"
+                  onMouseEnter={() => setIsPointerActive(true)}
+                  onMouseLeave={() => setIsPointerActive(false)}
+                >
                   Space
                 </div>
                 <div className="text-white/80 text-xl font-light">
@@ -419,6 +489,9 @@ export default function VideoRoomsApp() {
             <motion.button
               key={obj.id}
               onClick={() => onObjectClick(obj)}
+              // MODIFIED: Added mouse events here to trigger the custom pointer
+              onMouseEnter={() => setIsPointerActive(true)}
+              onMouseLeave={() => setIsPointerActive(false)}
               className="absolute  -translate-x-1/2 -translate-y-1/2 pointer-events-auto bg-transparent border-none outline-none active:outline-none transition p-0 w-40 h-40 z-10"
               style={{ left: obj.x, top: obj.y }}
               initial={{ scale: 0.5, opacity: 0 }}
@@ -438,12 +511,15 @@ export default function VideoRoomsApp() {
             </motion.button>
           ))}
 
+        {/* MODIFIED: Added mouse events to the 'Continue' hint for consistency */}
         {pausedForPopup && visibleObjects.length > 0 && (
           <motion.div
             key="hint"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
+            // We can't easily add mouse events here, but the text tells the user to press space, which is not a pointer interaction.
+            // Leaving this as is.
           >
             <div
               className="absolute bottom-8 left-1/2 bg-zinc-900/70 text-white px-6 py-3 rounded-full backdrop-blur-md border border-amber-400/30 shadow-xl z-10 text-base text-center"
@@ -459,8 +535,8 @@ export default function VideoRoomsApp() {
         )}
       </AnimatePresence>
 
-      {/* ADDED: End Screen */}
-      {/* <AnimatePresence>
+      {/* End Screen */}
+      <AnimatePresence>
         {videoFinished && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -481,7 +557,7 @@ export default function VideoRoomsApp() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
 
       {/* 💎 Modal */}
       <AnimatePresence>
@@ -499,11 +575,16 @@ export default function VideoRoomsApp() {
               exit={{ scale: 0.9, y: 20 }}
               transition={{ duration: 0.4 }}
               className="bg-zinc-900/95 border-2 border-amber-400/40 rounded-2xl p-8 max-w-4xl mx-4 shadow-3xl text-left backdrop-blur-lg w-full"
+              // MODIFIED: Added mouse events to the modal container
+              onMouseEnter={() => setIsPointerActive(false)}
+              onMouseLeave={() => setIsPointerActive(false)}
             >
               <div className="text-right">
                 <button
                   onClick={closeModal}
                   className="text-white/50 hover:text-white text-3xl font-light transition"
+                  onMouseEnter={() => setIsPointerActive(true)}
+                  onMouseLeave={() => setIsPointerActive(false)}
                 >
                   &times;
                 </button>
@@ -524,7 +605,7 @@ export default function VideoRoomsApp() {
                   />
                 )}
 
-                {activeModal?.video && (
+                {activeModal?.video ? (
                   <video
                     src={activeModal.video}
                     controls
@@ -532,11 +613,9 @@ export default function VideoRoomsApp() {
                     playsInline
                     className="w-full h-auto object-contain rounded-lg"
                   ></video>
-                )}
-
-                {activeModal?.transcript && (
+                ) : (
                   <p className="text-lg text-gray-300 border-l-4 border-amber-400/50 pl-4 italic">
-                    <TypewriterText transcript={activeModal.transcript} />
+                    {activeModal.text}
                   </p>
                 )}
               </motion.div>
@@ -550,6 +629,8 @@ export default function VideoRoomsApp() {
               <button
                 onClick={closeModal}
                 className="mt-8 px-10 py-3 bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 rounded-full text-amber-300 font-semibold transition tracking-wide"
+                onMouseEnter={() => setIsPointerActive(true)}
+                onMouseLeave={() => setIsPointerActive(false)}
               >
                 Close View
               </button>
