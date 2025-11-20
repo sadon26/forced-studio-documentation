@@ -17,7 +17,7 @@ import utensilsAudio from "./assets/pot-audio.MP3";
 // import darkRoomAudio from "./assets/dark-room.MP3";
 import officeBlueprintImg from "./assets/office_blueprint.png";
 import storageVideo from "./assets/storage_clip_archivalresearch1.mp4";
-// import machineRoomBlenderVid from "./assets/machineroom1_clip_blender.mp4";
+import machineRoomBlenderVid from "./assets/machineroom1_clip_blender.mp4";
 import videoSoundForProject from "./assets/Video-Sound-for-the-project.mp4";
 import videoSoundForProjectImg from "./assets/Video-Sound-for-the-project.png";
 import TypewriterText from "./TypeWriter";
@@ -117,6 +117,15 @@ export default function VideoRoomsApp() {
           popupTime: 17,
         },
         {
+          id: "o3431",
+          src: machineRoomBlenderImg,
+          x: "50%",
+          y: "50%",
+          video: machineRoomBlenderVid,
+          audio: null,
+          popupTime: 23,
+        },
+        {
           id: "o156",
           src: programRecordImg,
           x: "20%",
@@ -124,7 +133,7 @@ export default function VideoRoomsApp() {
           video: programRecord,
           // image: officeBlueprintImg,
           audio: ambientAudioFile,
-          popupTime: 22,
+          popupTime: 26,
         },
       ],
     },
